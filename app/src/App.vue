@@ -39,7 +39,11 @@
           space-x-4
         "
       >
-        <form class="w-full flex" v-if="id === editedTodoId" v-on:submit.prevent="updateTodo">
+        <form
+          class="w-full flex"
+          v-if="id === editedTodoId"
+          v-on:submit.prevent="updateTodo"
+        >
           <input
             type="text"
             name="editedTodoTitle"
@@ -59,13 +63,6 @@
         <p v-else>{{ title }}</p>
         <div class="flex flex-shrink-0 space-x-2">
           <button
-            class="text-gray-800 py-1 px-2 font-medium"
-            @click="cancel"
-            v-if="id === editedTodoId"
-          >
-            Cancel
-          </button>
-          <button
             class="
               border-2 border-gray-800
               text-gray-800
@@ -81,6 +78,13 @@
             Confirm
           </button>
           <button
+            class="text-gray-800 py-1 px-2 font-medium"
+            @click="cancel"
+            v-if="id === editedTodoId"
+          >
+            Cancel
+          </button>
+          <button
             class="
               bg-gray-800
               border-2 border-gray-800
@@ -91,9 +95,24 @@
               rounded-md
             "
             @click="editTodo(id, title)"
-            v-else
+            v-if="id !== editedTodoId"
           >
             Edit
+          </button>
+          <button
+            class="
+              border-2 border-gray-800
+              text-gray-800
+              bg-gray-50
+              py-1
+              px-2
+              rounded-md
+              font-medium
+            "
+            @click="deleteTodo(id)"
+            v-if="id !== editedTodoId"
+          >
+            Delete
           </button>
         </div>
       </div>
@@ -180,7 +199,6 @@ export default defineComponent({
           id: this.editedTodoId,
           title: this.editedTodoTitle,
         };
-        console.log(payload);
         const { data } = await axios.put(`/todo/update/${payload.id}`, payload);
         const formattedData = {
           id: data?.ID,
@@ -188,12 +206,21 @@ export default defineComponent({
           createdAt: data?.CreatedAt,
           updatedAt: data?.UpdatedAt,
         } as Todo;
-        const updatedTodosIndex = this.todos.findIndex(
+        const updatedTodoIndex = this.todos.findIndex(
           (todo) => todo.id === formattedData.id
         );
-        this.todos[updatedTodosIndex] = formattedData;
-        console.log(this.todos);
+        this.todos[updatedTodoIndex] = formattedData;
         this.cancel();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async deleteTodo(id: string) {
+      try {
+        await axios.delete(`/todo/delete/${id}`);
+        const deletedTodoIndex = this.todos.findIndex((todo) => todo.id === id);
+        delete this.todos[deletedTodoIndex]
+        this.fetchTodos()
       } catch (error) {
         console.log(error);
       }
