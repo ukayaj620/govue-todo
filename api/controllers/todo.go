@@ -17,6 +17,7 @@ func FetchAllTodo(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{
 			"message": result.Error.Error(),
 		})
+		return
 	}
 
 	c.JSON(http.StatusOK, todo)
@@ -32,6 +33,7 @@ func CreateTodo(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{
 			"message": result.Error.Error(),
 		})
+		return
 	}
 
 	c.JSON(http.StatusOK, todo)
@@ -41,12 +43,15 @@ func UpdateTodo(c *gin.Context) {
 	var todo models.Todo
 	id := c.Params.ByName("id")
 
-	result := db.DB.Where("id = ?", id).Updates(c.BindJSON(&todo))
+	c.BindJSON(&todo)
+
+	result := db.DB.Where("id = ?", id).Updates(&todo)
 
 	if result.Error != nil {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{
 			"message": result.Error.Error(),
 		})
+		return
 	}
 
 	c.JSON(http.StatusOK, todo)
@@ -62,6 +67,7 @@ func DeleteTodo(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{
 			"message": result.Error.Error(),
 		})
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
