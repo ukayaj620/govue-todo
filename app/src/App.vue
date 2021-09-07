@@ -137,24 +137,4 @@ export default defineComponent({
   flex-direction: column;
   align-items: center;
 }
-
-.todo-form {
-  width: 100%;
-}
-
-.todo-input {
-  width: 100%;
-}
-
-.todos {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 512px;
-}
-
-.todo {
-  width: 100%;
-  display: flex;
-}
 </style>
