@@ -1,24 +1,101 @@
 <template>
-  <div id="app">
-    <h1>GoVue Todo List</h1>
-    <form method="POST" class="todo-form" v-on:submit.prevent="createTodo">
+  <div id="app" class="w-full max-w-lg">
+    <h1 class="text-3xl font-bold">GoVue Todo List</h1>
+    <form method="POST" class="w-full my-6" v-on:submit.prevent="createTodo">
       <input
         v-model="todo"
         type="text"
         name="todo"
-        class="todo-input"
+        class="
+          w-full
+          border-2
+          px-3
+          py-2
+          border-gray-300
+          rounded-lg
+          outline-none
+          focus:ring focus:ring-gray-200
+        "
         placeholder="what to do?"
       />
     </form>
-    <div method="POST" class="todos" v-for="{ id, title } in todos" :key="id">
-      <div class="todo">
-        <form v-if="id === editedTodoId" v-on:submit.prevent="updateTodo">
-          <input type="text" name="editedTodoTitle" v-model="editedTodoTitle" />
+    <div
+      method="POST"
+      class="w-full flex flex-col"
+      v-for="{ id, title } in todos"
+      :key="id"
+    >
+      <div
+        class="
+          w-full
+          flex flex-row
+          items-center
+          justify-between
+          border-2 border-gray-300
+          px-3
+          py-4
+          my-2
+          rounded-xl
+          space-x-4
+        "
+      >
+        <form class="w-full flex" v-if="id === editedTodoId" v-on:submit.prevent="updateTodo">
+          <input
+            type="text"
+            name="editedTodoTitle"
+            v-model="editedTodoTitle"
+            class="
+              w-full
+              border-2
+              px-3
+              py-2
+              border-gray-300
+              rounded-lg
+              outline-none
+              focus:ring focus:ring-gray-200
+            "
+          />
         </form>
         <p v-else>{{ title }}</p>
-        <button @click="cancel" v-if="id === editedTodoId">Cancel</button>
-        <button @click="updateTodo" v-if="id === editedTodoId">Confirm</button>
-        <button @click="editTodo(id, title)" v-else>Edit</button>
+        <div class="flex flex-shrink-0 space-x-2">
+          <button
+            class="text-gray-800 py-1 px-2 font-medium"
+            @click="cancel"
+            v-if="id === editedTodoId"
+          >
+            Cancel
+          </button>
+          <button
+            class="
+              border-2 border-gray-800
+              text-gray-800
+              bg-gray-50
+              py-1
+              px-2
+              rounded-md
+              font-medium
+            "
+            @click="updateTodo"
+            v-if="id === editedTodoId"
+          >
+            Confirm
+          </button>
+          <button
+            class="
+              bg-gray-800
+              border-2 border-gray-800
+              text-gray-50
+              py-1
+              px-2
+              font-medium
+              rounded-md
+            "
+            @click="editTodo(id, title)"
+            v-else
+          >
+            Edit
+          </button>
+        </div>
       </div>
     </div>
   </div>
